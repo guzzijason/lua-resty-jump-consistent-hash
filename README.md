@@ -24,7 +24,7 @@ make PREFIX=/opt/trafficserver install
 local jchash = require "chash.jchash"
 
 local buckets = 8
-local id = jchash.hash_short_str("random key", buckets)
+local id = jchash.hash_str("random key", buckets)
 ```
 
 **or you can use the wrapping module `chash.server` to consistent-hash a list of servers**  
