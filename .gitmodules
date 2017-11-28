@@ -1,3 +1,3 @@
 [submodule "lib/crc32"]
 	path = lib/crc32
-	url = git@github.com:guzzijason/crc32.git
+  url = https://github.com/guzzijason/crc32.git
