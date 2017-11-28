@@ -84,7 +84,8 @@ svr = cs:lookup(ip)   -- if the server was origin1, then it has 66% chance to st
 ```
 
 ## Todo
-- better crc32? Original relied on nginx libraries
+- better crc32? Original relied on nginx libraries (ngx.crc32_short(), ngx.crc32_long())
+- tests that don't rely on nginx
 
 ## Test
 
