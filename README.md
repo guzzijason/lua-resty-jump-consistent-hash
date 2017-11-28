@@ -23,7 +23,7 @@ local buckets = 8
 local id = jchash.hash_short_str("random key", buckets)
 ```
 
-**or you can use the wrapping module `chash.server` to consistent-hash a list of servers**
+**or you can use the wrapping module `chash.server` to consistent-hash a list of servers**  
 **(Apache Traffic Server example)**
 ```
 ts.add_package_cpath('/opt/trafficserver/lualib/?.so')
