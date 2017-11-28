@@ -56,32 +56,31 @@ end
 
 -- you can even update the servers list, and still maintain the consistence, eg.
 local my_new_servers = {
-    { "127.0.0.2", 80 },
-    { "127.0.0.3", 80 },
-    { "127.0.0.4", 80 }
+    { "origin1.example.com", 80 },
+    { "origin2.example.com", 80 },
+    { "origin3.examaple.com", 80 }
 }
-
 cs:update_servers(my_new_servers)
-svr = cs:lookup(uri)   -- if the server was 127.0.0.2, then it stays the same,
-                       -- as we only update the 127.0.0.4.
+svr = cs:lookup(ip)   -- if the server was origin2, then it stays the same,
+                       -- as we only update origin3.
 
 -- what's more, consistence is maintained even the number of servers changes! eg.
 local my_less_servers = {
-    { "127.0.0.2", 80 },
-    { "127.0.0.3", 80 }
+    { "origin1.example.com", 80 },
+    { "origin3.example.com", 80 }
 }
 cs:update_servers(my_less_servers)
-svr = cs:lookup(uri)   -- if the server was 127.0.0.2, then it stays the same,
-                       -- if the server was 127.0.0.4, then it has 50% chance to be
-                       -- 127.0.0.3 or 127.0.0.4
+svr = cs:lookup(ip)   -- if the server was origin1, then it stays the same,
+                       -- if the server was origin2, then it has 50% chance to be
+                       -- origin1 or origin3
 
 cs:update_servers(my_new_servers)
-svr = cs:lookup(uri)   -- if the server was 127.0.0.2, then it has 66% chance to stay the same
+svr = cs:lookup(ip)   -- if the server was origin1, then it has 66% chance to stay the same
 
 ```
 
 ## Todo
-- better crc32?
+- better crc32? Original relied on nginx libraries
 
 ## Test
 
