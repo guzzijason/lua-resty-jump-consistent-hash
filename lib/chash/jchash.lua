@@ -34,20 +34,12 @@ end
 local _M = {}
 local mt = { __index = _M }
 
-function _M.hash_short_str(key, size)
+function _M.hash_str(key, size)
     -- do the simple consisten hash
     -- @key: string, the string to hash
     -- @size: the maxmium value this func might return
     -- @return: a number between [1, size]
-    local key2int = ngx.crc32_short(key)
-    return clib.jump_consistent_hash(key2int, size) + 1
-end
-
-function _M.hash_long_str(key, size)
-    -- @key: string, the string to hash
-    -- @size: the maxmium value this func might return
-    -- @return: a number between [1, size]
-    local key2int = ngx.crc32_long(key)
+    local key2int = crc32(key)
     return clib.jump_consistent_hash(key2int, size) + 1
 end
 

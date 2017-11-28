@@ -1,4 +1,4 @@
-local jchash = require "resty.chash.jchash"
+local jchash = require "chash.jchash"
 
 local ok, new_table = pcall(require, "table.new")
 if not ok then
@@ -128,7 +128,7 @@ function _M.lookup(self, key)  --> server/nil
     if #self.servers == 0 or not key then
         return nil
     end
-    local index = jchash.hash_short_str(key, #self.servers)
+    local index = jchash.hash_str(key, #self.servers)
     return self.servers[index]
 end
 
