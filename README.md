@@ -1,5 +1,7 @@
-## Jump Consisten Hash for luajit
+## Jump Consistent Hash for luajit
 A simple implementation of [this paper](http://arxiv.org/pdf/1406.2294.pdf).
+Based on code from [ruoshan/lua-resty-jump-consistent-hash](https://github.com/ruoshan/lua-resty-jump-consistent-hash).
+Made to work in Apache Traffic Server by replacing nginx crc32 dependency with [luapower/crc32](https://github.com/luapower/crc32).
 
 ## Features
 - small memory footprint and fast
@@ -8,36 +10,49 @@ A simple implementation of [this paper](http://arxiv.org/pdf/1406.2294.pdf).
 ## Installation
 ```
 make
-make PREFIX=/usr/local/openresty install
+make PREFIX=/opt/trafficserver install
 ```
 
 ## Usage
 
-* you can use the basic jchash module to do consistent-hash
+**you can use the basic jchash module to do consistent-hash**
 ```
-local jchash = require "resty.chash.jchash"
+local jchash = require "chash.jchash"
 
 local buckets = 8
 local id = jchash.hash_short_str("random key", buckets)
 ```
 
-* or you can use the wrapping module `resty.chash.server` to consistent-hash a list of servers
+**or you can use the wrapping module `chash.server` to consistent-hash a list of servers**
+**(Apache Traffic Server example)**
 ```
-local jchash_server = require "resty.chash.server"
+ts.add_package_cpath('/opt/trafficserver/lualib/?.so')
+ts.add_package_path('/opt/trafficserver/lualib/?.lua')
 
+local jchash_server = require "chash.server"
+
+-- Define 2 origin servers, split traffic 10%/90% for A/B testing
+-- {addr, port, weight} weight can be left out if it's 1
 local my_servers = {
-    { "127.0.0.1", 80, 1},   -- {addr, port, weight} weight can be left out if it's 1
-    { "127.0.0.2", 80 },
-    { "127.0.0.3", 80 }
+    { "origin1.example.com", 80, 90},
+    { "origin2.example.com", 80, 10}
 }
 
-local cs, err = jchash_server.new(my_servers)
-local uri = ngx.var.uri
-local svr = cs:lookup(uri)
-local addr = svr[1]
-local port = svr[2]
+function do_remap()
+    local cs, err = jchash_server.new(my_servers)
+    local ip, port, family = ts.client_request.client_addr.get_addr()
+    local svr = cs:lookup(ip)
+    local origin = svr[1]
+    ts.client_request.set_url_host(origin)
+    return TS_LUA_REMAP_DID_REMAP
+end
 
--- now you can use the ngx.balancer to do some consistent LB
+```
+
+## Further examples
+
+```
+...
 
 -- you can even update the servers list, and still maintain the consistence, eg.
 local my_new_servers = {
@@ -66,8 +81,7 @@ svr = cs:lookup(uri)   -- if the server was 127.0.0.2, then it has 66% chance to
 ```
 
 ## Todo
-- ~~weight for the servers list~~ [done]
-- ~~Test::Nginx~~ [done]
+- better crc32?
 
 ## Test
 
