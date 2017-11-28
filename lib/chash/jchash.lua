@@ -1,4 +1,5 @@
 local ffi = require "ffi"
+local crc32 = require "crc32/crc32"
 
 ffi.cdef[[
 int32_t jump_consistent_hash(uint64_t key, int32_t num_buckets);
