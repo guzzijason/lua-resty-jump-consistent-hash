@@ -1,7 +1,7 @@
 ## Jump Consistent Hash for luajit
-A simple implementation of [this paper](http://arxiv.org/pdf/1406.2294.pdf).
-Based on code from [ruoshan/lua-resty-jump-consistent-hash](https://github.com/ruoshan/lua-resty-jump-consistent-hash).
-Made to work in Apache Traffic Server by replacing nginx crc32 dependency with [luapower/crc32](https://github.com/luapower/crc32).
+A simple implementation of [this paper](http://arxiv.org/pdf/1406.2294.pdf).  
+Based on code from [ruoshan/lua-resty-jump-consistent-hash](https://github.com/ruoshan/lua-resty-jump-consistent-hash).  
+Made to work in Apache Traffic Server by replacing nginx crc32 dependency with [luapower/crc32](https://github.com/luapower/crc32).  
 
 ## Features
 - small memory footprint and fast
