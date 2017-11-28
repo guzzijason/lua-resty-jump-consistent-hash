@@ -9,6 +9,10 @@ Made to work in Apache Traffic Server by replacing nginx crc32 dependency with [
 
 ## Installation
 ```
+git clone https://github.com/guzzijason/lua-trafficserver-jump-consistent-hash.git
+cd lua-trafficserver-jump-consistent-hash/
+git submodule init
+git submodule update
 make
 make PREFIX=/opt/trafficserver install
 ```
