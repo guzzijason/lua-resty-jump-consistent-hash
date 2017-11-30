@@ -74,6 +74,7 @@ function do_remap()
     local ip, port, family = ts.client_request.client_addr.get_addr()
     local svr = cs:lookup(ip)
     local vers = var[1]
+    -- if our URI matches a given pattern, then remap it using the consistent-hash:
     if uri:find("^/shaper/") then
         uri = uri:gsub("^/shaper/", "/shaper/" .. vers .. "/")
     end
