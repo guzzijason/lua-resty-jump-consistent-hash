@@ -53,6 +53,36 @@ end
 
 ```
 
+**also, you can use module `chash.string` to consistent-hash arbitrary strings such as for URI remapping**
+```
+ts.add_package_cpath('/opt/trafficserver/lualib/?.so')
+ts.add_package_path('/opt/trafficserver/lualib/?.lua')
+
+local jchash_string = require "chash.string"
+
+-- Define 3 URI variants, splitting traffic weight 90/8/2
+-- {string, weight} weight can be left out if it's 1
+local my_versions = {
+    { "prod", 90},
+    { "beta",  8},
+    { "alpha", 2}
+}
+
+function do_remap()
+    local cs, err = jchash_string.new(my_versions)
+    local uri = ts.client_request.get_uri()
+    local ip, port, family = ts.client_request.client_addr.get_addr()
+    local svr = cs:lookup(ip)
+    local vers = var[1]
+    if uri:find("^/shaper/") then
+        uri = uri:gsub("^/shaper/", "/shaper/" .. vers .. "/")
+    end
+    ts.client_request.set_uri(uri)
+    return 0
+end
+
+```
+
 ## Further examples
 
 ```
